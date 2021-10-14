@@ -13,8 +13,8 @@ from plotly import graph_objs as go
 import os
 
 # Leer datos
-df_clientes= pd.read_csv(r'data/clientes.csv')
-df_acopios = pd.read_csv(r'data/acopios.csv')
+df_clientes= pd.read_csv(r'https://raw.githubusercontent.com/endorgobio/federika/master/data/clientes.csv')
+df_acopios = pd.read_csv(r'https://raw.githubusercontent.com/endorgobio/federika/master/data/acopios.csv')
 df_indicadores = pd.DataFrame(columns=['indicador', 'valor'])
 # Crea la instancia
 instance = Instance(df_clientes, df_acopios)
@@ -244,7 +244,7 @@ activetab_label_style = {
 # Define the layout
 app.layout = dbc.Container([
         #navbar,
-        dbc.Row(html.Img(src='assets/images/imagenBannerCorcho.jpg', style={'width':'100%'})),
+        dbc.Row(html.Img(src='assets/images/imagenBanner_Zonificacion1.jpg', style={'width':'100%'})),
         dbc.Tabs(
             children=[
                 dbc.Tab(label="La historia", tab_id="historia", label_style=tab_label_style, active_label_style=activetab_label_style),
