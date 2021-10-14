@@ -24,7 +24,7 @@ instance.create_elementos()
 # Configura optimiser
 solvername = 'glpk'
 solverpath_exe = 'C:\\glpk-4.65\\w64\\glpsol'
-#solverpath_exe = 'D:\\glpk-4.65\\w64\\glpsol'
+solverpath_exe = 'D:\\glpk-4.65\\w64\\glpsol'
 
 # Define the stylesheets
 external_stylesheets = [dbc.themes.BOOTSTRAP,
@@ -125,9 +125,11 @@ tab1_content = dbc.Row([
             md=4),
     ]
 )
-PAGE_SIZE = 10
+
 tab2_content = dbc.Row([
     dbc.Container(controls_card, fluid=True),
+    dbc.Container(dbc.Col(dcc.Graph(id="map"), width=12),
+                  fluid=True),
     dbc.Container(
         dbc.Row([
             dbc.Col(
@@ -148,9 +150,6 @@ tab2_content = dbc.Row([
                                     'overflow': 'hidden'
                                 },
                                 style_as_list_view=True,
-                                #page_current=0,
-                                #page_size=PAGE_SIZE,
-                                #page_action='custom'
                             ),
                         ]
                     )
@@ -159,9 +158,7 @@ tab2_content = dbc.Row([
             ),
         ]),
         fluid=True
-    ),
-    dbc.Container(dbc.Col(dcc.Graph(id="map"), width=12),
-                  fluid=True)
+    )
 ])
 
 tab3_content = dbc.Row([
@@ -247,7 +244,7 @@ activetab_label_style = {
 # Define the layout
 app.layout = dbc.Container([
         #navbar,
-        dbc.Row(html.Img(src='assets/images/imagenBanner_Zonificacion1.jpg', style={'width':'100%'})),
+        dbc.Row(html.Img(src='assets/images/imagenBannerCorcho.jpg', style={'width':'100%'})),
         dbc.Tabs(
             children=[
                 dbc.Tab(label="La historia", tab_id="historia", label_style=tab_label_style, active_label_style=activetab_label_style),
@@ -295,7 +292,7 @@ def render_tab_content(active_tab):
     Output('datatable_indicadores', 'data'),
     Input('data_solver_clientes', 'data'),
     Input('data_solver_acopios', 'data'))
-def update_table_clusters(data_solver_clientes, data_solver_acopios):
+def update_table_indicators(data_solver_clientes, data_solver_acopios):
     df_solclientes = pd.read_json(data_solver_clientes, orient='split')
     df_solacopios = pd.read_json(data_solver_acopios, orient='split')
     df_ind = pd.DataFrame(columns=['indicador', 'valor'])
@@ -304,11 +301,19 @@ def update_table_clusters(data_solver_clientes, data_solver_acopios):
                'valor':  df_solclientes['cobertura'].sum()}
     df_ind = df_ind.append(new_row, ignore_index=True)
     # % clientes cubiertos con dmax
-    txt = "{valor:.1f}%!"
+    txt = "{valor:.1f}%"
     perc = 100*df_solclientes["cobertura"].sum()/len(df_solclientes)
     new_row = {'indicador': 'porcentaje clientes cubiertos',
                'valor': txt.format(valor=perc)}
     df_ind = df_ind.append(new_row, ignore_index=True)
+    # Distancia a acopio
+    txt = "{valor:.1f} km"
+    valor = df_solclientes['dist_min'].mean()/1000
+    new_row = {'indicador': 'distancia promedio a acopio',
+               'valor': txt.format(valor=valor)}
+    df_ind = df_ind.append(new_row, ignore_index=True)
+
+
     return df_ind.to_dict('records')
 
 
@@ -321,7 +326,8 @@ def update_table_clusters(data_solver_clientes, data_solver_acopios):
 def solve_model(clic_resolver, n_acopios, dmax):
     # create model
     model = opt.create_model(instance, n_acopios, dmax*1000)
-    df_solclientes, df_solacopios, opt_term_cond = opt.solve_model(instance, model, solvername, solverpath_exe)
+    #df_solclientes, df_solacopios, opt_term_cond = opt.solve_model(instance, model, solvername, solverpath_exe)
+    df_solclientes, df_solacopios, opt_term_cond = opt.solve_model(instance, model, solvername)
     if opt_term_cond == 'infeasible':
         return no_update, no_update
     else:
@@ -388,7 +394,7 @@ def update_graph(jsonified_solclientes, jsonified_solacopios, ):
         name="contenedores"
     ))
 
-    # adiciona trace para acopios no biertos
+    # adiciona trace para acopios no cubiertos
     df_solacopios_no = df_solacopios[df_solacopios['assign'] == 0]
     map.add_trace(go.Scattermapbox(
         lat=df_solacopios_no.latitud,

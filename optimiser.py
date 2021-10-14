@@ -78,9 +78,11 @@ def solve_model(instance, model, solver_name, solver_path=None):
         df_solclientes = instance.df_clientes
         df_solclientes["cobertura"] = 0
         df_solclientes["list_cob"] = [[] for _ in range(df_solclientes.shape[0])]
+        df_solclientes["dist_min"] = -1
         df_solacopios = instance.df_acopios
         df_solacopios["assign"] = 0
         df_solacopios["list_clientes"] = [[] for _ in range(df_solacopios.shape[0])]
+        # Obtener coberturas y acopios abiertos
         res = model.x.get_values()
         for key, value in res.items():
             if value > 0:
@@ -88,7 +90,15 @@ def solve_model(instance, model, solver_name, solver_path=None):
                 df_solacopios.loc[key[1], "assign"] = 1
                 df_solclientes.loc[key[0], 'list_cob'].append(key[1])
                 df_solacopios.loc[key[1], "list_clientes"].append(key[0])
-
+        # Obtener distancias mínimas
+        res = model.y.get_values()
+        abiertos = [key for key in res.keys() if res[key] > 0]
+        for i in range(len(df_solclientes)):
+            dist_min = float('inf')
+            for j in abiertos:
+                if instance.distancias[(i, j)] <= dist_min:
+                    dist_min = instance.distancias[(i, j)]
+            df_solclientes.loc[i, "dist_min"]=dist_min
         return df_solclientes, df_solacopios, term_cond
 
     else:
