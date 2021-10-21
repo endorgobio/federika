@@ -12,9 +12,20 @@ import plotly.express as px
 from plotly import graph_objs as go
 import os
 
-# Leer datos
-df_clientes= pd.read_csv(r'https://raw.githubusercontent.com/endorgobio/federika/master/data/clientes.csv')
-df_acopios = pd.read_csv(r'https://raw.githubusercontent.com/endorgobio/federika/master/data/acopios.csv')
+# Leer datos de github
+#df_clientes= pd.read_csv(r'https://raw.githubusercontent.com/endorgobio/federika/master/data/clientes.csv')
+#df_acopios = pd.read_csv(r'https://raw.githubusercontent.com/endorgobio/federika/master/data/acopios.csv')
+
+# Leer datos drive endorgobio
+import pandas as pd
+book_id = '1X_3s7widO60dPf4js8e9bRLL_xX8Qnq9OIAWQJgmXI4'
+sheet_restaurantes = 'restaurantes'
+sheet_acopios = 'contenedores'
+url_rest = f"https://docs.google.com/spreadsheets/d/{book_id}/gviz/tq?tqx=out:csv&sheet={sheet_restaurantes}"
+url_acopios = f"https://docs.google.com/spreadsheets/d/{book_id}/gviz/tq?tqx=out:csv&sheet={sheet_acopios}"
+df_clientes= pd.read_csv(url_rest)
+df_acopios = pd.read_csv(url_acopios)
+
 df_indicadores = pd.DataFrame(columns=['indicador', 'valor'])
 # Crea la instancia
 instance = Instance(df_clientes, df_acopios)
@@ -326,7 +337,7 @@ def update_table_indicators(data_solver_clientes, data_solver_acopios):
 def solve_model(clic_resolver, n_acopios, dmax):
     # create model
     model = opt.create_model(instance, n_acopios, dmax*1000)
-    #df_solclientes, df_solacopios, opt_term_cond = opt.solve_model(instance, model, solvername, solverpath_exe)
+    # df_solclientes, df_solacopios, opt_term_cond = opt.solve_model(instance, model, solvername, solverpath_exe)
     df_solclientes, df_solacopios, opt_term_cond = opt.solve_model(instance, model, solvername)
     if opt_term_cond == 'infeasible':
         return no_update, no_update

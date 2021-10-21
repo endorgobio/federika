@@ -6,7 +6,7 @@ g_API = "AIzaSyCZ7uHDJNPNFNpH1-b6rsZUM7h5oQcFV0U"
 gmaps_key = googlemaps.Client(key=g_API)
 
 # Get addresses
-restaurantes = pd.read_csv('data/restaurantes_located.csv')
+restaurantes = pd.read_csv('../data/restaurantes_located.csv')
 
 restaurantes["latitud"] = None
 restaurantes["longitud"] = None

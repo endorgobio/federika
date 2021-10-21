@@ -4,7 +4,7 @@ from urllib.request import urlopen
 
 
 
-soup = BeautifulSoup(open(r'data/RestaurantesRionegroGuru.html', encoding="utf8"), "html.parser")
+soup = BeautifulSoup(open(r'../data/RestaurantesRionegroGuru.html', encoding="utf8"), "html.parser")
 df_rest = pd.DataFrame(columns=['nombre', 'descripcion'])
 new_row = {'nombre': 'a', 'descripcion': 'descripcion'}
 df_rest.append(new_row, ignore_index = True)
