@@ -19,6 +19,7 @@ def create_model(instance,
     model.distancias = Param(model.CLIENTES, model.ACOPIOS, initialize=instance.distancias)
     model.nacopios = Param(initialize=n_acopios)
     model.dmax = Param(initialize=d_max)
+    model.abiertos = Param(model.ACOPIOS, initialize=instance.abiertos)
 
     # Define variables
     model.x = Var(model.CLIENTES, model.ACOPIOS, within=Binary)  # Asignacion
@@ -27,7 +28,7 @@ def create_model(instance,
 
     # Define función objetivo
     def coverage(model):
-        return sum(model.w[i] for i in model.CLIENTES) + \
+        return sum(model.w[i]*model.generacion[i] for i in model.CLIENTES) + \
                0.00001*sum(sum(model.x[i,j] for i in model.CLIENTES ) for j in model.ACOPIOS)
     model.coverage = Objective(sense=maximize, rule=coverage)
 
@@ -55,6 +56,14 @@ def create_model(instance,
     def wi_max(model, i):
         return model.w[i] <= sum(model.x[i, j] for j in model.ACOPIOS)
     model.wi_max = Constraint(model.CLIENTES, rule=wi_max)
+
+    # 4. Acopios de apertura obligatoria
+    def obligatorios(model, j):
+        if model.abiertos[j] == 1:
+            return model.y[j] == 1
+        else:
+            return Constraint.Skip
+    model.obligatorio = Constraint(model.ACOPIOS, rule=obligatorios)
 
     return model
 
@@ -90,6 +99,11 @@ def solve_model(instance, model, solver_name, solver_path=None):
                 df_solacopios.loc[key[1], "assign"] = 1
                 df_solclientes.loc[key[0], 'list_cob'].append(key[1])
                 df_solacopios.loc[key[1], "list_clientes"].append(key[0])
+        # obtener abiertos
+        res = model.y.get_values()
+        for key, value in res.items():
+            if value > 0:
+                df_solacopios.loc[key, "assign"] = 1
         # Obtener distancias mínimas
         res = model.y.get_values()
         abiertos = [key for key in res.keys() if res[key] > 0]

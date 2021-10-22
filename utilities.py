@@ -12,6 +12,7 @@ class Instance:
         self.ACOPIOS = set()
         self.distancias = {}
         self.generacion = {}  # cantidad generada en cada cliente
+        self.abiertos = {} # 1 indica que el acopio debe estar abierto
 
     def create_elementos(self):
         # Adiciona consecutivos para nombrar las variables
@@ -24,6 +25,8 @@ class Instance:
 
         # Parámetros
         self.generacion = dict(zip(self.df_clientes.var_id, self.df_clientes.generacion))
+        self.abiertos = dict(zip(self.df_acopios.var_id, self.df_acopios.abierto))
+
 
         # TODO: precalcular
         # calcula distancas

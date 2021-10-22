@@ -35,7 +35,7 @@ instance.create_elementos()
 # Configura optimiser
 solvername = 'glpk'
 solverpath_exe = 'C:\\glpk-4.65\\w64\\glpsol'
-solverpath_exe = 'D:\\glpk-4.65\\w64\\glpsol'
+#solverpath_exe = 'D:\\glpk-4.65\\w64\\glpsol'
 
 # Define the stylesheets
 external_stylesheets = [dbc.themes.BOOTSTRAP,
@@ -337,8 +337,8 @@ def update_table_indicators(data_solver_clientes, data_solver_acopios):
 def solve_model(clic_resolver, n_acopios, dmax):
     # create model
     model = opt.create_model(instance, n_acopios, dmax*1000)
-    # df_solclientes, df_solacopios, opt_term_cond = opt.solve_model(instance, model, solvername, solverpath_exe)
-    df_solclientes, df_solacopios, opt_term_cond = opt.solve_model(instance, model, solvername)
+    df_solclientes, df_solacopios, opt_term_cond = opt.solve_model(instance, model, solvername, solverpath_exe)
+    #df_solclientes, df_solacopios, opt_term_cond = opt.solve_model(instance, model, solvername)
     if opt_term_cond == 'infeasible':
         return no_update, no_update
     else:
