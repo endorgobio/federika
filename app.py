@@ -58,7 +58,24 @@ server = app.server
 filepath = os.path.split(os.path.realpath(__file__))[0]
 # narrative tab1
 #historia_text = open(os.path.join(filepath, "laHistoria.md"), "r").read()
-historia_text= " "
+historia_text = html.Div([
+    html.P('''Federica Cork es una start-up colombiana que, siguiendo los principios de la 
+    economía circular, diseña y produce artículos innovadores usando el corcho recuperado 
+    de las botellas de vino'''),
+    html.P('''El corcho es un material extraordinario, por lo que usarlo una sola vez y desecharlo 
+    al descorchar las botellas es un desperdicio absurdo. Sin embargo, la tarea de recolectarlo no es simple, 
+    puesto que la demanda de vino, y por ende la generación de corchos para disponer, esta dispersa en bares,
+    restaurantes y cafes.  Ante la imposibilidad de una recolección punto por punto, Federica Cork debe 
+    establecer una red de contenedores para que sus establecimientos aliados dispongan allí periódicamente 
+    los corchos de las botellas que consumen. 
+    '''),
+    html.P('''Federica Cork se postuló a proyecto endorgobio con el fin de disponer de una herramienta que 
+    le provea información para diseñar la red de contenedores, identificando cuantos y dónde debería localizar 
+    para poder ofrecer a sus aliados una propuesta de servicio respecto a la cercanía del sitio donde disponer 
+    los corchos de las botellas consumida.. 
+    ''')
+])
+
 # narrative tab3
 #detalles_text = open(os.path.join(filepath, "losDetalles.md"), "r").read()
 detalles_text = " "
@@ -98,7 +115,7 @@ controls_card = dbc.Card(
                 )
 
 tab1_content = dbc.Row([
-        dbc.Col(dcc.Markdown(historia_text, dangerously_allow_html=True), md=8),
+        dbc.Col(historia_text, md=8),
         dbc.Col(html.Div([
             #html.Img(src="/assets/images/banner_blue_text.png", className='banner_subsection'),
             html.Div(
@@ -108,7 +125,8 @@ tab1_content = dbc.Row([
             dbc.Card([
                 dbc.CardBody([
                     html.P(
-                        "Visualizar la asignación de pacientes por zona en un mapa",
+                        "Geolocalizar los estableciemientos aliados y ubicaciones potenciales "
+                        "de los contenedores",
                         style={'textAlign': 'justify'},
                         className="card-text",
                     ),
@@ -117,8 +135,8 @@ tab1_content = dbc.Row([
             dbc.Card([
                 dbc.CardBody([
                     html.P(
-                        "Crear un modelo que asigne zonas a los terapeutas balanceando las"
-                        "cargas de trabajo",
+                        "Diseñar una herramienta que permita experimentar con distintas configuraciones "
+                        "de la red y niveles de la promesa de servicio",
                         style={'textAlign': 'justify'},
                         className="card-text",
                     ),
@@ -127,7 +145,8 @@ tab1_content = dbc.Row([
             dbc.Card([
                 dbc.CardBody([
                     html.P(
-                        "Resolver el modelo con un optimizador no comercial",
+                        "Generar indicadores que midan la conveniencia de la configuración "
+                        "de la red ",
                         style={'textAlign': 'justify'},
                         className="card-text",
                     ),
