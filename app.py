@@ -48,7 +48,7 @@ external_stylesheets = [dbc.themes.BOOTSTRAP,
 # Crea la app
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets,
                 external_scripts=['//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML',],
-                title="Zonificación",
+                title="Federica Cork",
                 suppress_callback_exceptions=True)
 
 # Para correr en heroku
