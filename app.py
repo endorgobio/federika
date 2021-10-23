@@ -29,6 +29,7 @@ df_acopios = pd.read_csv(url_acopios)
 df_indicadores = pd.DataFrame(columns=['indicador', 'valor'])
 # Crea la instancia
 instance = Instance(df_clientes, df_acopios)
+min_acopios = max(1, df_acopios['abierto'].sum())
 # Preprocesa dataframe
 instance.create_elementos()
 
@@ -67,8 +68,8 @@ controls_card = dbc.Card(
                         dbc.Col([
                                 dbc.FormGroup([
                                         html.P("Número de acopios"),
-                                        dbc.Input(id="n_acopios", type="number", min=1, max=len(instance.df_acopios),
-                                                  step=1, value=3),
+                                        dbc.Input(id="n_acopios", type="number", min=min_acopios, max=len(instance.df_acopios),
+                                                  step=1, value=int(len(instance.df_acopios)/3)),
                                 ]),
                                 ],
                             md=4
