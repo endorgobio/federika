@@ -247,7 +247,7 @@ tab_label_style = {
 }
 
 activetab_label_style = {
-    'color': '#FD6E72',
+    'color': '#0d594c',
     'fontWeight': 'bold'
 }
 
@@ -255,7 +255,7 @@ activetab_label_style = {
 # Define the layout
 app.layout = dbc.Container([
         #navbar,
-        dbc.Row(html.Img(src='assets/images/imagenBanner_Zonificacion1.jpg', style={'width':'100%'})),
+        dbc.Row(html.Img(src='assets/images/federica_header.png', style={'width':'100%'})),
         dbc.Tabs(
             children=[
                 dbc.Tab(label="La historia", tab_id="historia", label_style=tab_label_style, active_label_style=activetab_label_style),
@@ -274,7 +274,7 @@ app.layout = dbc.Container([
                       dcc.Store(id='data_solver_acopios')]
         ),
         dbc.Container(id="tab-content", className="p-4", fluid=True),
-        dbc.Row(html.Img(src='assets/images/pie-endorgobio.jpg', style={'width':'100%'})),
+        dbc.Row(html.Img(src='assets/images/footnote_federica.png', style={'width':'100%'})),
     ],
     fluid=True,
 )
@@ -337,8 +337,8 @@ def update_table_indicators(data_solver_clientes, data_solver_acopios):
 def solve_model(clic_resolver, n_acopios, dmax):
     # create model
     model = opt.create_model(instance, n_acopios, dmax*1000)
-    df_solclientes, df_solacopios, opt_term_cond = opt.solve_model(instance, model, solvername, solverpath_exe)
-    #df_solclientes, df_solacopios, opt_term_cond = opt.solve_model(instance, model, solvername)
+    #df_solclientes, df_solacopios, opt_term_cond = opt.solve_model(instance, model, solvername, solverpath_exe)
+    df_solclientes, df_solacopios, opt_term_cond = opt.solve_model(instance, model, solvername)
     if opt_term_cond == 'infeasible':
         return no_update, no_update
     else:
