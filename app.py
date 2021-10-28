@@ -11,6 +11,7 @@ from dash.dependencies import Input, Output, State
 import plotly.express as px
 from plotly import graph_objs as go
 import os
+import json
 
 # Leer datos de github
 #df_clientes= pd.read_csv(r'https://raw.githubusercontent.com/endorgobio/federika/master/data/clientes.csv')
@@ -79,6 +80,12 @@ historia_text = html.Div([
 # narrative tab3
 #detalles_text = open(os.path.join(filepath, "losDetalles.md"), "r").read()
 detalles_text = " "
+# narrative tab3
+# modelo
+f = open('modelo.json', )
+# returns JSON object as
+# a dictionary
+data = json.load(f)
 
 controls_card = dbc.Card(
                     dbc.CardBody(dbc.Row([
@@ -195,38 +202,41 @@ tab2_content = dbc.Row([
 tab3_content = dbc.Row([
     dbc.Col(
         html.Div(id='static', children=[
-            html.P("Detras de la zonificación de los pacientes para ser asignados al personal"
-                   "asistencial hay un modelo  matemático que genera información que ayuda a "
-                   "tomar dicha decisión. Este es el modelo:"),
+            html.P("La información que apoya la decisión respecto a la localización de los contenedores para recolectar "
+                   "los tapones de corcho esta apoyada por el siguiente modelo matemático:"),
             dbc.Card([
                 # dbc.CardImg(src="https://source.unsplash.com/daily", top=True),
                 # dbc.CardImg(src="/assets/images/banner_blue.png", top=True),
                 dbc.CardBody([
                     dcc.Markdown('''
-                        Sea `P` el conjunto de pacientes, cada uno de ellos con una demanda estimada de
-                         tiempo de servicio `t`. Considere la distancia `d` entre cada par de pacientes y `k` 
-                         como el número de zonas que deben crearse. La carga de trabajo estimada para cada zona
-                         puede calcularse como la suma total de las cargas `t` sobre el número de zonas `k`. Considere
-                         ademas &epsilon; como el porcentaje máximo tolerable de diferencia entre la carga de trabajo de
-                         una zona y la carga promedio esperada.  
-                        Asumiremos que cada una de las zonas se crea entorno a uno de los pacientes. Para ello, 
-                        considere la variable `y` que indica si un paciente dado es el centro de una de las `k`
-                        zonas; la variable `x` determina a cual de las zonas creadas es asignado cada paciente
+                        Sea `E` el conjunto de establecimientos, cada uno de ellos con un nivel de generación `g` que 
+                        determina su importancia. Sea `C` el conjunto de localizaciones potenciales para los contenedores, 
+                        siendo  `k` el número máximo de contenedores que pueden ubicarse (por ejemplo, por restricciones 
+                        presupuestales). Sea `d` la distancia entre cada establecimiento y cada ubicación potencial de los 
+                        contenedores y `dmax` el valor máximo tolerable para dicha distancia.
+
+                        Considere la variable `y` que indica si se situa un contenedor en una determinada localización 
+                        potencial;   la variable `x` que indica si un establecieminto esta cubierto por un determinado 
+                        contenedor, es decir, si la distancia entre el estableciemiento y el contenedor es menor a la 
+                        distancia máxima tolerable; y sea `w` una variable auxiliar que indica si el estableciemiento es
+                        cubierto o no, sin eimportar cuantos contenedores lo cubren y evitando asi contar múltiples veces 
+                        las coberturas.  
                     '''),
-                    dcc.Markdown(''' La función busca crear zonas compactas minimizando la suma de  la distancia  de los 
-                    pacientes al centro de sus zonas. '''),
+                    dcc.Markdown(''' La función objetivo maximiza la cobertura total del sistema, '''),
+                    data['objetivo'],
+                    dcc.Markdown(''' Garantizando el límite máximo de contenedores localizados, '''),
+                    data['restriccion1'],
+                    dcc.Markdown(''' La asignación solo puede hacerse sobre aquellas localizaciones donde se ubica un 
+                    contenedor'''),
+                    data['restriccion2'],
+                    dcc.Markdown(''' Se considera que un contenedor cubre un establecimiento si la distancia entre ellos 
+                    es menor que el máximo permitido'''),
+                    data['restriccion3'],
 
-                    dcc.Markdown(''' Garantizando que: '''),
-                    dcc.Markdown(''' Cada paciente es asignado a una zona. '''),
-
-
-                    dcc.Markdown(''' Se crean tantas zonas cómo indica el parámetro `k` '''),
-
-                    dcc.Markdown(''' Se identifica la localización de un paciente como el centro de cada zona y los pacientes 
-                        se asignan solo a dichas zonas'''),
-
-                    dcc.Markdown(''' La carga de trabajo de cada zona solo puede desviarse un &epsilon; % del valor promedio
-                    de la carga '''),
+                    dcc.Markdown(''' Por último se garantiza que solo se contabiliza una vez cada establecimiento
+                    cubiert'''),
+                    data['restriccion4'],
+                    data['restriccion5'],
                 ])
             ]),
         ]),
@@ -235,7 +245,17 @@ tab3_content = dbc.Row([
         [
             dbc.Card(
                 dbc.CardBody([
-                    html.P("El modelo se implementó en python, haciendo uso de la libreria "
+                    html.P("Los establecimientos y localizaciones se geoposicionaron usando la API de google Maps")
+                ])
+            ),
+            dbc.Card(
+                dbc.CardBody([
+                    html.P("Los datos son accesibles y modificables a través de google drive")
+                ])
+            ),
+            dbc.Card(
+                dbc.CardBody([
+                    html.P("El modelo se implementó en python, haciendo uso de la libreria"
                            "para modelación Pyomo")
                 ])
             ),
