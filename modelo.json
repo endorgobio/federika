@@ -1,0 +1,8 @@
+{
+  "objetivo": "$$\\text{maximizar}\\  \\displaystyle\\sum_{i \\in E}g_{i}w_{j} $$",
+  "restriccion1": "$$\\sum_{j \\in C}  y_{j} \\leq k $$",
+  "restriccion2": "$$\\sum_{i \\in E}  x_{ij} = |E|y_{j} \\forall j \\in C$$",
+  "restriccion3": "$$ d_{ij}x_{ij} \\leq d_{max} \\ \\forall i \\in E, \\forall j \\in C$$",
+  "restriccion4": "$$  w_i |C| \\geq \\sum_{j \\in C}x_{ij} \\ \\forall j \\in C$$",
+  "restriccion5": "$$  w_i \\leq \\sum_{j \\in C}x_{ij} \\ \\forall j \\in C$$"
+}
