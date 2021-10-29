@@ -37,7 +37,7 @@ instance.create_elementos()
 # Configura optimiser
 solvername = 'glpk'
 solverpath_exe = 'C:\\glpk-4.65\\w64\\glpsol'
-#solverpath_exe = 'D:\\glpk-4.65\\w64\\glpsol'
+solverpath_exe = 'D:\\glpk-4.65\\w64\\glpsol'
 
 # Define the stylesheets
 external_stylesheets = [dbc.themes.BOOTSTRAP,
@@ -198,84 +198,84 @@ tab2_content = dbc.Row([
         fluid=True
     )
 ])
-
-tab3_content = dbc.Row([
-    dbc.Col(
-        html.Div(id='static', children=[
-            html.P("La información que apoya la decisión respecto a la localización de los contenedores para recolectar "
-                   "los tapones de corcho esta apoyada por el siguiente modelo matemático:"),
-            dbc.Card([
-                # dbc.CardImg(src="https://source.unsplash.com/daily", top=True),
-                # dbc.CardImg(src="/assets/images/banner_blue.png", top=True),
-                dbc.CardBody([
-                    dcc.Markdown('''
-                        Sea `E` el conjunto de establecimientos, cada uno de ellos con un nivel de generación `g` que 
-                        determina su importancia. Sea `C` el conjunto de localizaciones potenciales para los contenedores, 
-                        siendo  `k` el número máximo de contenedores que pueden ubicarse (por ejemplo, por restricciones 
-                        presupuestales). Sea `d` la distancia entre cada establecimiento y cada ubicación potencial de los 
-                        contenedores y `dmax` el valor máximo tolerable para dicha distancia.
-
-                        Considere la variable `y` que indica si se situa un contenedor en una determinada localización 
-                        potencial;   la variable `x` que indica si un establecieminto esta cubierto por un determinado 
-                        contenedor, es decir, si la distancia entre el estableciemiento y el contenedor es menor a la 
-                        distancia máxima tolerable; y sea `w` una variable auxiliar que indica si el estableciemiento es
-                        cubierto o no, sin eimportar cuantos contenedores lo cubren y evitando asi contar múltiples veces 
-                        las coberturas.  
-                    '''),
-                    dcc.Markdown(''' La función objetivo maximiza la cobertura total del sistema, '''),
-                    data['objetivo'],
-                    dcc.Markdown(''' Garantizando el límite máximo de contenedores localizados, '''),
-                    data['restriccion1'],
-                    dcc.Markdown(''' La asignación solo puede hacerse sobre aquellas localizaciones donde se ubica un 
-                    contenedor'''),
-                    data['restriccion2'],
-                    dcc.Markdown(''' Se considera que un contenedor cubre un establecimiento si la distancia entre ellos 
-                    es menor que el máximo permitido'''),
-                    data['restriccion3'],
-
-                    dcc.Markdown(''' Por último se garantiza que solo se contabiliza una vez cada establecimiento
-                    cubiert'''),
-                    data['restriccion4'],
-                    data['restriccion5'],
-                ])
-            ]),
-        ]),
-        md=8),
-    dbc.Col(
-        [
-            dbc.Card(
-                dbc.CardBody([
-                    html.P("Los establecimientos y localizaciones se geoposicionaron usando la API de google Maps")
-                ])
-            ),
-            dbc.Card(
-                dbc.CardBody([
-                    html.P("Los datos son accesibles y modificables a través de google drive")
-                ])
-            ),
-            dbc.Card(
-                dbc.CardBody([
-                    html.P("El modelo se implementó en python, haciendo uso de la libreria"
-                           "para modelación Pyomo")
-                ])
-            ),
-            dbc.Card(
-                dbc.CardBody([
-                    html.P("El solver empleado para resolver el modelo fue glpk, cuyo uso  para "
-                           "fines no comerciales esta regulado the por el acuerdo 'GNU General Public License'")
-                ])
-            ),
-            dbc.Card(
-                dbc.CardBody([
-                    html.P("La visualización de los resultados del modelo se implemento haciendo uso del framework "
-                           "dash soportado plotly para las gráficas y visualizaciones'")
-                ])
-            )
-        ],
-        md=4
-    ),
-]
-)
+tab3_content = dbc.Row([])
+# tab3_content = dbc.Row([
+#     dbc.Col(
+#         html.Div(id='static', children=[
+#             html.P("La información que apoya la decisión respecto a la localización de los contenedores para recolectar "
+#                    "los tapones de corcho esta apoyada por el siguiente modelo matemático:"),
+#             dbc.Card([
+#                 # dbc.CardImg(src="https://source.unsplash.com/daily", top=True),
+#                 # dbc.CardImg(src="/assets/images/banner_blue.png", top=True),
+#                 dbc.CardBody([
+#                     dcc.Markdown('''
+#                         Sea `E` el conjunto de establecimientos, cada uno de ellos con un nivel de generación `g` que
+#                         determina su importancia. Sea `C` el conjunto de localizaciones potenciales para los contenedores,
+#                         siendo  `k` el número máximo de contenedores que pueden ubicarse (por ejemplo, por restricciones
+#                         presupuestales). Sea `d` la distancia entre cada establecimiento y cada ubicación potencial de los
+#                         contenedores y `dmax` el valor máximo tolerable para dicha distancia.
+#
+#                         Considere la variable `y` que indica si se situa un contenedor en una determinada localización
+#                         potencial;   la variable `x` que indica si un establecieminto esta cubierto por un determinado
+#                         contenedor, es decir, si la distancia entre el estableciemiento y el contenedor es menor a la
+#                         distancia máxima tolerable; y sea `w` una variable auxiliar que indica si el estableciemiento es
+#                         cubierto o no, sin eimportar cuantos contenedores lo cubren y evitando asi contar múltiples veces
+#                         las coberturas.
+#                     '''),
+#                     dcc.Markdown(''' La función objetivo maximiza la cobertura total del sistema, '''),
+#                     data['objetivo'],
+#                     dcc.Markdown(''' Garantizando el límite máximo de contenedores localizados, '''),
+#                     data['restriccion1'],
+#                     dcc.Markdown(''' La asignación solo puede hacerse sobre aquellas localizaciones donde se ubica un
+#                     contenedor'''),
+#                     data['restriccion2'],
+#                     dcc.Markdown(''' Se considera que un contenedor cubre un establecimiento si la distancia entre ellos
+#                     es menor que el máximo permitido'''),
+#                     data['restriccion3'],
+#
+#                     dcc.Markdown(''' Por último se garantiza que solo se contabiliza una vez cada establecimiento
+#                     cubiert'''),
+#                     data['restriccion4'],
+#                     data['restriccion5'],
+#                 ])
+#             ]),
+#         ]),
+#         md=8),
+#     dbc.Col(
+#         [
+#             dbc.Card(
+#                 dbc.CardBody([
+#                     html.P("Los establecimientos y localizaciones se geoposicionaron usando la API de google Maps")
+#                 ])
+#             ),
+#             dbc.Card(
+#                 dbc.CardBody([
+#                     html.P("Los datos son accesibles y modificables a través de google drive")
+#                 ])
+#             ),
+#             dbc.Card(
+#                 dbc.CardBody([
+#                     html.P("El modelo se implementó en python, haciendo uso de la libreria"
+#                            "para modelación Pyomo")
+#                 ])
+#             ),
+#             dbc.Card(
+#                 dbc.CardBody([
+#                     html.P("El solver empleado para resolver el modelo fue glpk, cuyo uso  para "
+#                            "fines no comerciales esta regulado the por el acuerdo 'GNU General Public License'")
+#                 ])
+#             ),
+#             dbc.Card(
+#                 dbc.CardBody([
+#                     html.P("La visualización de los resultados del modelo se implemento haciendo uso del framework "
+#                            "dash soportado plotly para las gráficas y visualizaciones'")
+#                 ])
+#             )
+#         ],
+#         md=4
+#     ),
+# ]
+# )
 
 tabs_styles = {
     'height': '44px',
